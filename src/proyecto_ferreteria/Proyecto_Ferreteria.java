@@ -14,7 +14,7 @@ public class Proyecto_Ferreteria {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        IniciarSesion1 pedidoProducto = new IniciarSesion1();
+        IniciarSesion pedidoProducto = new IniciarSesion();
         //VentanaPrincipal pedidoProducto = new VentanaPrincipal();
         pedidoProducto.setVisible(true);
        

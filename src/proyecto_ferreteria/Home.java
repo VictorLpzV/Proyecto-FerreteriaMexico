@@ -4,6 +4,8 @@
  */
 package proyecto_ferreteria;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author victo
@@ -15,6 +17,7 @@ public class Home extends javax.swing.JFrame {
      */
     public Home() {
         initComponents();
+        jPanel2.setFocusable(true);
     }
 
     /**
@@ -27,13 +30,14 @@ public class Home extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel6 = new javax.swing.JLabel();
+        buttonGroupRegistros = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jButtonVenta = new javax.swing.JButton();
         jButtonAceptar = new javax.swing.JButton();
         jTextFieldIdPedido = new javax.swing.JTextField();
         jRadioButtonIdPedido = new javax.swing.JRadioButton();
@@ -52,7 +56,8 @@ public class Home extends javax.swing.JFrame {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto_ferreteria/imagenes/usuario.png"))); // NOI18N
 
         jTextField1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
-        jTextField1.setText("jTextField1");
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField1.setText("Admin");
 
         jLabel3.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         jLabel3.setText("Realizar Venta");
@@ -60,15 +65,27 @@ public class Home extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         jLabel4.setText("Revisar Registros");
 
-        jButton1.setText("Aceptar");
+        jButtonVenta.setText("Aceptar");
+        jButtonVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVentaActionPerformed(evt);
+            }
+        });
 
         jButtonAceptar.setText("Aceptar");
+        jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAceptarActionPerformed(evt);
+            }
+        });
 
-        jTextFieldIdPedido.setText("Usuario");
+        jTextFieldIdPedido.setText("ID Pedido");
 
+        buttonGroupRegistros.add(jRadioButtonIdPedido);
         jRadioButtonIdPedido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jRadioButtonIdPedido.setText("Id Pedido");
 
+        buttonGroupRegistros.add(jRadioButtonTodosPedidos);
         jRadioButtonTodosPedidos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jRadioButtonTodosPedidos.setText("Todos los pedidos");
 
@@ -87,7 +104,7 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(jRadioButtonIdPedido)
                     .addComponent(jRadioButtonTodosPedidos)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonVenta, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
@@ -111,7 +128,7 @@ public class Home extends javax.swing.JFrame {
                         .addGap(42, 42, 42)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -135,6 +152,11 @@ public class Home extends javax.swing.JFrame {
         jLabel1.setText("Ferretería México");
 
         jButton4.setText("Salir");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -177,45 +199,52 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
+        if( jRadioButtonIdPedido.isSelected() ) {
+            //Llamar a la ventana
+            if( jTextFieldIdPedido.getText().equals("") || jTextFieldIdPedido.getText().equals("ID Pedido") ) {
+                JOptionPane.showMessageDialog(this, "Primero ingrese un ID");
+                jTextFieldIdPedido.setFocusable(true);
+                return;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            
+            TablaRegistros registros = new TablaRegistros(Integer.parseInt(jTextFieldIdPedido.getText()));
+            
+            registros.setVisible(true);
+            registros.setLocationRelativeTo(this);
+        } else if( jRadioButtonTodosPedidos.isSelected() ) {
+            //Llamar a la ventana
+            TablaRegistros registros = new TablaRegistros();
+            registros.setVisible(true);
+            registros.setLocationRelativeTo(this);
+        } else {
+            JOptionPane.showMessageDialog(this, "Primero selecciona una opción");
         }
-        //</editor-fold>
+        
+        limpiarSeleccion();
+    }//GEN-LAST:event_jButtonAceptarActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Home().setVisible(true);
-            }
-        });
+    private void jButtonVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVentaActionPerformed
+        VentanaPrincipal venta = new VentanaPrincipal();
+        venta.setVisible(true);
+        venta.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jButtonVentaActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void limpiarSeleccion() {
+        this.buttonGroupRegistros.clearSelection();
+        this.jTextFieldIdPedido.setText("");
     }
-
+        
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.ButtonGroup buttonGroupRegistros;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButtonAceptar;
+    private javax.swing.JButton jButtonVenta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -4,6 +4,12 @@
  */
 package proyecto_ferreteria;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author victo
@@ -15,6 +21,16 @@ public class TablaRegistros extends javax.swing.JFrame {
      */
     public TablaRegistros() {
         initComponents();
+        jButtonEliminar.setVisible(false);
+        jButtonModificar.setVisible(false);
+        obtenerPedidos();
+        ocultarColumna();
+    }
+    
+    public TablaRegistros(int idPedido) {
+        initComponents();
+        obtenerPedidos(idPedido);
+        ocultarColumna();
     }
 
     /**
@@ -34,6 +50,7 @@ public class TablaRegistros extends javax.swing.JFrame {
         jButtonModificar = new javax.swing.JButton();
         jButtonEliminar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jLabelTitulo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -44,51 +61,77 @@ public class TablaRegistros extends javax.swing.JFrame {
 
         jTableRegistros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "num. Pedido", "Producto", "Cantidad", "Tipo"
+                "Fila", "num. Pedido", "Producto", "Cantidad", "Tipo"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTableRegistros);
+        if (jTableRegistros.getColumnModel().getColumnCount() > 0) {
+            jTableRegistros.getColumnModel().getColumn(0).setResizable(false);
+            jTableRegistros.getColumnModel().getColumn(0).setPreferredWidth(0);
+        }
 
         jLabelnomProductos.setFont(new java.awt.Font("Yu Gothic UI", 0, 22)); // NOI18N
         jLabelnomProductos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelnomProductos.setText("Productos");
 
         jButtonModificar.setText("Modificar");
+        jButtonModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarActionPerformed(evt);
+            }
+        });
 
         jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setText("Registro de todos los pedidos guardados");
+        jLabel1.setText("Registro de los pedidos guardados");
+
+        jButton1.setText("Salir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 40, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(jButtonModificar)))
-                .addGap(38, 38, 38))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(0, 40, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabelnomProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(210, 210, 210))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
+                                .addComponent(jButtonModificar))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(38, 38, 38))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(165, 165, 165))))
+                        .addComponent(jLabelnomProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(210, 210, 210))))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(181, 181, 181)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonEliminar, jButtonModificar});
@@ -105,7 +148,8 @@ public class TablaRegistros extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonModificar)
-                    .addComponent(jButtonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -150,42 +194,143 @@ public class TablaRegistros extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TablaRegistros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TablaRegistros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TablaRegistros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TablaRegistros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar el pedido?", "Eliminar pedido", JOptionPane.YES_NO_OPTION);
+        
+        if( opcion == JOptionPane.NO_OPTION )
+            return;
+        
+        //Llamar al método para eliminar todos los productos con ese id
+        String idPedido = jTableRegistros.getValueAt(0, 0).toString();
+        
+        if( eliminarPedido(idPedido) == 0 ) {
+            JOptionPane.showMessageDialog(this, "Lo sentimos ha ocurrido un problema al eliminar el pedido.");
+            return;
         }
-        //</editor-fold>
+        
+        JOptionPane.showMessageDialog(this, "El pedido ha sido eliminado con éxito");
+        this.dispose();
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TablaRegistros().setVisible(true);
+    private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
+        Conexion conexion = new Conexion();
+        int filas = 0;
+        
+        for( int i=0 ; i<jTableRegistros.getRowCount() ; i++ ) {
+            try {
+                String sql = "UPDATE productos "
+                          + "SET Id = '"+jTableRegistros.getValueAt(i, 1)+"', "
+                              + "Nombre = '"+jTableRegistros.getValueAt(i, 2)+"', "
+                              + "Cantidad = '"+jTableRegistros.getValueAt(i, 3)+"', "
+                              + "Tipo = '"+jTableRegistros.getValueAt(i, 4)+"' "
+                          + "WHERE Fila = '"+jTableRegistros.getValueAt(i, 0)+"'";
+                System.out.println("SQL: " + sql);
+                filas =+ conexion.sentencia.executeUpdate(sql);
+            } catch (SQLException ex) {
+                Logger.getLogger(TablaRegistros.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
-    }
+        }
+        
+        if( filas == 0 ) {
+            JOptionPane.showMessageDialog(this, "Lo sentimos, ha ocurrido un problema al actualizar el pedido");
+            return;
+        }
+        
+        JOptionPane.showMessageDialog(this, "El pedido se ha actualizado con éxito");
+        this.dispose();
+    }//GEN-LAST:event_jButtonModificarActionPerformed
 
+    private void obtenerPedidos() {
+        Conexion conexion = new Conexion();
+        DefaultTableModel modelo;
+        
+        String sql = "SELECT * "
+                   + "FROM `productos` ";
+        
+        try {
+            conexion.resultSet = conexion.sentencia.executeQuery(sql);
+            Object[] pedido = new Object[5];
+            modelo = (DefaultTableModel)jTableRegistros.getModel();
+            try {
+                while(conexion.resultSet.next()){
+                    pedido[0] = conexion.resultSet.getInt("Fila");
+                    pedido[1] = conexion.resultSet.getInt("Id");
+                    pedido[2] = conexion.resultSet.getString("Nombre");
+                    pedido[3] = conexion.resultSet.getString("Cantidad");
+                    pedido[4] = conexion.resultSet.getString("Tipo");
+                    modelo.addRow(pedido);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error: " + e);
+            }
+            jTableRegistros.setModel(modelo);
+            conexion.conexion.close();
+        }catch(SQLException e){
+            System.err.println("Error: " + e);
+        }
+    }
+    
+    private void obtenerPedidos(int idPedido) {
+        Conexion conexion = new Conexion();
+        DefaultTableModel modelo;
+        
+        String sql = "SELECT * "
+                   + "FROM `productos` " 
+                   + "WHERE Id = '"+idPedido+"'";
+        
+        try {
+            conexion.resultSet = conexion.sentencia.executeQuery(sql);
+            Object[] pedido = new Object[5];
+            modelo = (DefaultTableModel)jTableRegistros.getModel();
+            try {
+                while(conexion.resultSet.next()){
+                    pedido[0] = conexion.resultSet.getInt("Fila");
+                    pedido[1] = conexion.resultSet.getInt("Id");
+                    pedido[2] = conexion.resultSet.getString("Nombre");
+                    pedido[3] = conexion.resultSet.getString("Cantidad");
+                    pedido[4] = conexion.resultSet.getString("Tipo");
+                    modelo.addRow(pedido);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error: " + e);
+            }
+            jTableRegistros.setModel(modelo);
+            conexion.conexion.close();
+        }catch(SQLException e){
+            System.err.println("Error: " + e);
+        }
+    }
+   
+    private int eliminarPedido(String idPedido) {
+        Conexion conexion = new Conexion();
+        int filas = 0;
+        
+        String sql = "DELETE "
+                   + "FROM productos "
+                   + "WHERE Id = '"+idPedido+"'";
+        
+        try {
+            filas = conexion.sentencia.executeUpdate(sql);
+            conexion.conexion.close();
+        }catch(SQLException e){
+            System.err.println("Error: " + e);
+        }
+        
+        return filas;
+    }
+    
+    private void ocultarColumna() {
+        jTableRegistros.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTableRegistros.getColumnModel().getColumn(0).setMinWidth(0);
+        jTableRegistros.getColumnModel().getColumn(0).setPreferredWidth(0);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonEliminar;
     private javax.swing.JButton jButtonModificar;
     private javax.swing.JLabel jLabel1;

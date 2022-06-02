@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 public class DetalleDePedido extends javax.swing.JFrame {
 
     Conexion con = new Conexion();
+    private int idPedido = 1;
 
     
     public static DefaultTableModel modelo2;
@@ -155,12 +156,17 @@ public class DetalleDePedido extends javax.swing.JFrame {
  public java.sql.Connection conexion;
  
     private void jbConfirmarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConfirmarPedidoActionPerformed
-          if(JTDetallesPedidos.getRowCount()>0){
+        if(JTDetallesPedidos.getRowCount()>0){
+            obtenerUltimoId();
             for (int i = 0; i < JTDetallesPedidos.getRowCount(); i++) {
-                con.ConectarBasedeDatos();
                 try {
-                    con.sentencia.execute("INSERT INTO productos(nombre,tipo,cantidad,proveedor, sucursal) "
-                            + "VALUES('"+ JTDetallesPedidos.getValueAt(i, 0)+"' , '"+ JTDetallesPedidos.getValueAt(i, 1)+"', '"+ JTDetallesPedidos.getValueAt(i, 2)+"', '"+ JTDetallesPedidos.getValueAt(i, 3)+"','"+ JTDetallesPedidos.getValueAt(i, 4)+"')");
+                    con.sentencia.execute("INSERT INTO productos(Id, Nombre, Tipo, Cantidad, Proveedor, Sucursal) "
+                            + "VALUES('"+getIdPedido()+"'"
+                                    + ", '"+ JTDetallesPedidos.getValueAt(i, 0)+"' "
+                                    + ", '"+ JTDetallesPedidos.getValueAt(i, 1)+"'"
+                                    + ", '"+ JTDetallesPedidos.getValueAt(i, 2)+"'"
+                                    + ", '"+ JTDetallesPedidos.getValueAt(i, 3)+"'"
+                                    + ", '"+ JTDetallesPedidos.getValueAt(i, 4)+"')");
                 } catch (SQLException ex) {
                     Logger.getLogger(DetalleDePedido.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -169,48 +175,35 @@ public class DetalleDePedido extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(this, "la tabla se encuentra vacía");
         }
-       
+       this.dispose();
     }//GEN-LAST:event_jbConfirmarPedidoActionPerformed
 
-    private void jbCancelarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarPedidoActionPerformed
-        JOptionPane.showMessageDialog(null,"El pedido ha sido cancelado");
-        System.exit(0);
-    }//GEN-LAST:event_jbCancelarPedidoActionPerformed
-
-    
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private int obtenerUltimoId() {
+        Conexion conexion = new Conexion();
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DetalleDePedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DetalleDePedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DetalleDePedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DetalleDePedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+            String sql = "SELECT Id FROM productos;";
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DetalleDePedido().setVisible(true);
+            conexion.resultSet = conexion.sentencia.executeQuery("SELECT Id FROM productos;");
+            while( conexion.resultSet.next() ) {
+                idPedido = conexion.resultSet.getInt("Id") + 1;
             }
-        });
+        } catch (SQLException ex) {
+            System.out.println("DetallePedido::obtenerUltimoId -> " + ex);
+        }
+        return 0;
     }
     
-  
+    private void jbCancelarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarPedidoActionPerformed
+        JOptionPane.showMessageDialog(null,"El pedido ha sido cancelado");
+        this.dispose();
+    }//GEN-LAST:event_jbCancelarPedidoActionPerformed
+
+    public int getIdPedido() {
+        return idPedido;
+    }
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable JTDetallesPedidos;
