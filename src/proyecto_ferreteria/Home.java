@@ -92,6 +92,11 @@ public class Home extends javax.swing.JFrame {
         });
 
         jTextFieldIdPedido.setText("ID Pedido");
+        jTextFieldIdPedido.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextFieldIdPedidoMouseClicked(evt);
+            }
+        });
 
         jRadioButtonIdPedido.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroupRegistros.add(jRadioButtonIdPedido);
@@ -250,6 +255,10 @@ public class Home extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTextFieldIdPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldIdPedidoMouseClicked
+        jTextFieldIdPedido.setText("");
+    }//GEN-LAST:event_jTextFieldIdPedidoMouseClicked
 
     private void limpiarSeleccion() {
         this.buttonGroupRegistros.clearSelection();
