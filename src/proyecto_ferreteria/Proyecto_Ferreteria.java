@@ -6,7 +6,7 @@ package proyecto_ferreteria;
 
 /**
  *
- * @author victo
+ * @author equipo ?
  */
 public class Proyecto_Ferreteria {
 
