@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package proyecto_ferreteria;
 
 import javax.swing.JOptionPane;
@@ -9,11 +5,13 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author victo
+ * @author Equipo Potaxie
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
+    
     DetalleDePedido ventanaInfo = new DetalleDePedido();
     DefaultTableModel modelo;
+    
     public VentanaPrincipal() {
         initComponents();
         this.setLocationRelativeTo(null);

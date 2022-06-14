@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package proyecto_ferreteria;
 
 import java.sql.SQLException;
@@ -14,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author victo
+ * @author Equipo Potaxie
  */
 public class DetalleDePedido extends javax.swing.JFrame {
 
@@ -173,7 +169,7 @@ public class DetalleDePedido extends javax.swing.JFrame {
                 try {
                     con.sentencia.execute("INSERT INTO productos(Id, Nombre, Tipo, Cantidad, Proveedor, Sucursal) "
                             + "VALUES('"+getIdPedido()+"'"
-                                    + ", '"+ JTDetallesPedidos.getValueAt(i, 0)+"' "
+                                    + ", '"+ JTDetallesPedidos.getValueAt(i, 0)+"'"
                                     + ", '"+ JTDetallesPedidos.getValueAt(i, 1)+"'"
                                     + ", '"+ JTDetallesPedidos.getValueAt(i, 2)+"'"
                                     + ", '"+ JTDetallesPedidos.getValueAt(i, 3)+"'"
